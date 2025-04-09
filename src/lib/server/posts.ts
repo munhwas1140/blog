@@ -257,6 +257,39 @@ export function getPostsByCategory(category: string): Post[] {
   );
 }
 
+export async function savePost(post: Post): Promise<boolean> {
+  try {
+    ensureDirectories();
+
+    const fullPath = path.join(postsDirectory, `${post.slug}.md`);
+
+    // 이미지 경로 정규화
+    let thumbnail = post.thumbnail;
+    if (thumbnail && thumbnail.startsWith("/")) {
+      thumbnail = thumbnail.substring(1); // 앞의 '/' 제거
+    }
+
+    const frontmatter: any = {
+      title: post.title,
+      date: post.date,
+      categories: post.categories || [],
+      excerpt: post.excerpt || "",
+    };
+
+    if (thumbnail) {
+      frontmatter.thumbnail = thumbnail;
+    }
+
+    const fileContent = matter.stringify(post.content, frontmatter);
+
+    fs.writeFileSync(fullPath, fileContent);
+    return true;
+  } catch (error) {
+    console.error("포스트 저장 오류:", error);
+    return false;
+  }
+}
+
 // 글 삭제 함수
 export async function deletePost(slug: string): Promise<boolean> {
   try {
