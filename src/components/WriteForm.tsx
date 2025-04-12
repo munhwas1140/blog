@@ -3,6 +3,146 @@
 import { useState, FormEvent, useRef, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import CategoryInput from "./CategoryInput";
+import styled from "styled-components";
+
+const FormContainer = styled.form`
+  & > * + * {
+    margin-top: 1.5rem;
+  }
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+`;
+
+const FormGroup = styled.div`
+  width: 100%;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #f9fafb;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  height: 16rem;
+  background-color: #f9fafb;
+  font-family: inherit;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+`;
+
+const UploadContainer = styled.div`
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+const UploadButton = styled.button<{ disabled?: boolean }>`
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  font-size: 0.875rem;
+  color: #374151;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
+
+const PreviewContainer = styled.div`
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+`;
+
+const PreviewImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const RemoveButton = styled.button`
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 9999px;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    background-color: #dc2626;
+  }
+`;
+
+const SubmitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+`;
+
+const SubmitButton = styled.button<{ disabled?: boolean }>`
+  background-color: black;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #1f2937;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
 
 export default function WriteForm() {
   const [title, setTitle] = useState("");
@@ -131,107 +271,80 @@ export default function WriteForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          제목
-        </label>
-        <input
+    <FormContainer onSubmit={handleSubmit}>
+      <FormGroup>
+        <Label htmlFor="title">제목</Label>
+        <Input
           id="title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
           required
         />
-      </div>
+      </FormGroup>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          카테고리
-        </label>
+      <FormGroup>
+        <Label>카테고리</Label>
         <CategoryInput
           categories={categories}
           onCategoriesChange={handleCategoriesChange}
         />
-      </div>
+      </FormGroup>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          대표 이미지
-        </label>
+      <FormGroup>
+        <Label>대표 이미지</Label>
 
-        <div className="mt-1 flex items-center space-x-4">
-          <button
+        <UploadContainer>
+          <UploadButton
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm text-gray-700 hover:bg-gray-50"
             disabled={uploadingImage}
           >
             {uploadingImage ? "업로드 중..." : "이미지 업로드"}
-          </button>
+          </UploadButton>
 
-          <input
+          <HiddenInput
             type="file"
             ref={fileInputRef}
             onChange={handleImageUpload}
             accept="image/*"
-            className="hidden"
           />
 
           {imagePreview && (
-            <div className="relative w-24 h-24">
-              <img
-                src={imagePreview}
-                alt="Thumbnail preview"
-                className="w-full h-full object-cover rounded-md"
-              />
-              <button
+            <PreviewContainer>
+              <PreviewImage src={imagePreview} alt="Thumbnail preview" />
+              <RemoveButton
                 type="button"
                 onClick={() => {
                   setImagePreview(null);
                   setThumbnail(null);
                   if (fileInputRef.current) fileInputRef.current.value = "";
                 }}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
               >
                 ×
-              </button>
-            </div>
+              </RemoveButton>
+            </PreviewContainer>
           )}
-        </div>
-      </div>
+        </UploadContainer>
+      </FormGroup>
 
-      <div>
-        <label
-          htmlFor="content"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          내용
-        </label>
-        <textarea
+      <FormGroup>
+        <Label htmlFor="content">내용</Label>
+        <TextArea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력하세요"
-          className="w-full p-3 border border-gray-300 rounded-md h-64 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
           required
         />
-      </div>
+      </FormGroup>
 
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting || uploadingImage}
-          className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 disabled:opacity-50"
-        >
+      <SubmitContainer>
+        <SubmitButton type="submit" disabled={isSubmitting || uploadingImage}>
           {isSubmitting ? "저장 중..." : "저장하기"}
-        </button>
-      </div>
-    </form>
+        </SubmitButton>
+      </SubmitContainer>
+    </FormContainer>
   );
 }

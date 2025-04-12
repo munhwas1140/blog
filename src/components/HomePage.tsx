@@ -6,11 +6,102 @@ import PostList from "./PostList";
 import CategorySelector from "./CategorySelector";
 import { filterPostsByCategory } from "@/lib/posts";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import styled from "styled-components";
 
 interface HomePageProps {
   initialPosts: Post[];
   categories: string[];
 }
+
+const Container = styled.div`
+  padding-bottom: 4rem;
+`;
+
+const HeaderSection = styled.div`
+  margin-bottom: 3rem;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const MainTitle = styled.h1`
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+`;
+
+const Description = styled.p`
+  color: #6b7280;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+`;
+
+const EmptyPostsMessage = styled.div`
+  background-color: #f9fafb;
+  padding: 2.5rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  margin-top: 2rem;
+`;
+
+const EmptyText = styled.p`
+  color: #6b7280;
+  font-size: 1.1rem;
+`;
+
+// 스크롤 버튼 인터페이스 정의
+interface ScrollTopButtonProps {
+  show: boolean;
+}
+
+const ScrollTopButton = styled.button<ScrollTopButtonProps>`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: #f8f9fa;
+  color: #212529;
+  border: 1px solid #dee2e6;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  z-index: 999; /* 더 높은 z-index 값 */
+  opacity: ${(props) => (props.show ? "1" : "0")};
+  visibility: ${(props) => (props.show ? "visible" : "hidden")};
+
+  &:hover {
+    background-color: #e9ecef;
+  }
+
+  svg {
+    font-size: 20px;
+  }
+`;
+
+const ScrollIcon = styled.svg`
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2.5;
+`;
 
 export default function HomePage({ initialPosts, categories }: HomePageProps) {
   const router = useRouter();
@@ -23,15 +114,12 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
   );
   const [filteredPosts, setFilteredPosts] = useState(initialPosts);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // 스크롤 관련 효과
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShowScrollTop(window.scrollY > 200);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -57,24 +145,28 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
     }
   }, [currentCategory, initialPosts]);
 
+  // 카테고리 변경 핸들러
   const handleCategoryChange = (category: string) => {
-    // URL 업데이트 (쿼리 파라미터)
-    const params = new URLSearchParams(searchParams.toString());
+    // 이미 같은 카테고리를 선택한 경우 아무 작업도 하지 않음
+    if (category === currentCategory) return;
 
-    if (category === "all") {
-      params.delete("category");
-    } else {
+    // 카테고리 변경 시 즉시 상태 업데이트
+    setCurrentCategory(category);
+    setCurrentPage(1);
+
+    // URL 변경 및 페이지 이동 (강제 리로드)
+    const params = new URLSearchParams();
+
+    if (category !== "all") {
       params.set("category", category);
     }
 
-    // 페이지를 1로 리셋
     params.set("page", "1");
 
-    // URL 업데이트
-    const newUrl = `${pathname}?${params.toString()}`;
-    router.push(newUrl);
-
-    setCurrentCategory(category);
+    // 직접 URL을 변경하여 문제 해결
+    window.location.href = `${pathname}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
   };
 
   const scrollToTop = () => {
@@ -95,17 +187,17 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
   };
 
   return (
-    <div className="pb-12">
-      <div className="mb-10 text-center">
-        <h1 className="text-3xl font-bold mb-4">소리의 일기</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+    <Container>
+      <HeaderSection>
+        <MainTitle>소리의 일기</MainTitle>
+        <Description>
           옛날 옛적 소리라는 아이가 살았습니다.
           <br />
           소리는 디자인을 공부하는 학생이고, 미소녀에요.
           <br />
-          그리고 4학녀이 나오는 애니메이션을 보는 걸 좋아해요.
-        </p>
-      </div>
+          그리고 4학년이 나오는 애니메이션을 보는 걸 좋아해요.
+        </Description>
+      </HeaderSection>
 
       <CategorySelector
         categories={categories}
@@ -117,37 +209,31 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
       {filteredPosts.length > 0 ? (
         <PostList posts={filteredPosts} currentCategory={currentCategory} />
       ) : (
-        <div className="bg-gray-50 p-8 text-center rounded-lg">
-          <p className="text-gray-600">
+        <EmptyPostsMessage>
+          <EmptyText>
             {currentCategory === "all"
               ? "아직 작성된 글이 없습니다. 첫 번째 글을 작성해보세요!"
               : `'${currentCategory}' 카테고리에 글이 없습니다.`}
-          </p>
-        </div>
+          </EmptyText>
+        </EmptyPostsMessage>
       )}
 
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all"
-          aria-label="맨 위로 스크롤"
+      {/* 무조건 스크롤 버튼 렌더링 하되 CSS로 보이거나 숨기게 함 */}
+      <ScrollTopButton onClick={scrollToTop} show={showScrollTop}>
+        <ScrollIcon
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 15l7-7 7 7"
-            />
-          </svg>
-        </button>
-      )}
-    </div>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 15l7-7 7 7"
+          />
+        </ScrollIcon>
+      </ScrollTopButton>
+    </Container>
   );
 }

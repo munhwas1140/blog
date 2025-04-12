@@ -1,11 +1,80 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
 
 interface CategoryInputProps {
   categories: string[];
   onCategoriesChange: (categories: string[]) => void;
 }
+
+const Container = styled.div``;
+
+const InputContainer = styled.div`
+  display: flex;
+  margin-bottom: 0.5rem;
+`;
+
+const StyledInput = styled.input`
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+  background-color: #f9fafb;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+`;
+
+const AddButton = styled.button`
+  padding: 0 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2563eb;
+  }
+`;
+
+const CategoriesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+`;
+
+const CategoryTag = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
+const CategoryText = styled.span``;
+
+const RemoveButton = styled.button`
+  margin-left: 0.5rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #111827;
+  }
+`;
 
 export default function CategoryInput({
   categories,
@@ -75,9 +144,9 @@ export default function CategoryInput({
   }, []);
 
   return (
-    <div>
-      <div className="flex mb-2">
-        <input
+    <Container>
+      <InputContainer>
+        <StyledInput
           ref={inputRef}
           type="text"
           value={inputValue}
@@ -86,36 +155,27 @@ export default function CategoryInput({
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
           placeholder="카테고리를 입력하고 Enter를 누르세요"
-          className="flex-grow p-3 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
         />
-        <button
-          type="button"
-          onClick={handleAddButtonClick}
-          className="px-4 py-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
-        >
+        <AddButton type="button" onClick={handleAddButtonClick}>
           추가
-        </button>
-      </div>
+        </AddButton>
+      </InputContainer>
 
       {categories.length > 0 && (
-        <div className="flex flex-wrap mb-4">
+        <CategoriesContainer>
           {categories.map((category) => (
-            <div
-              key={category}
-              className="flex items-center bg-gray-100 text-gray-700 text-sm rounded-full px-3 py-1 mr-2 mb-2"
-            >
-              <span>{category}</span>
-              <button
+            <CategoryTag key={category}>
+              <CategoryText>{category}</CategoryText>
+              <RemoveButton
                 type="button"
                 onClick={() => removeCategory(category)}
-                className="ml-2 text-gray-500 hover:text-gray-700"
               >
                 ×
-              </button>
-            </div>
+              </RemoveButton>
+            </CategoryTag>
           ))}
-        </div>
+        </CategoriesContainer>
       )}
-    </div>
+    </Container>
   );
 }

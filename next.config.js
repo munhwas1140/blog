@@ -8,6 +8,10 @@ const nextConfig = {
     domains: ["placehold.co"],
     unoptimized: true, // 이미지 최적화 비활성화
   },
+  compiler: {
+    // styled-components 지원 활성화
+    styledComponents: true,
+  },
   // API 라우트의 CORS 설정
   async headers() {
     return [
