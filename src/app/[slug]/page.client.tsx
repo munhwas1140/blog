@@ -72,6 +72,26 @@ const shimmer = keyframes`
   }
 `;
 
+const SkeletonImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-size: 800px 100%;
+  animation: ${shimmer} 1.5s infinite linear;
+  z-index: 1;
+`;
+
 const PostImage = styled.img`
   width: 100%;
   height: 100%;
@@ -339,27 +359,6 @@ const ConfirmButton = styled.button<{ disabled?: boolean }>`
   }
 `;
 
-const SkeletonImage = styled.div<{ isLoaded: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
-  background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
-  background-size: 800px 100%;
-  animation: ${shimmer} 1.5s infinite linear;
-  z-index: 1; /* 이미지 아래에 위치 */
-  opacity: ${(props) => (props.isLoaded ? 0 : 1)};
-  transition: opacity 0.3s ease;
-`;
 // 마지막 방문 페이지 정보를 관리하는 훅
 function useLastVisitedPage() {
   const searchParams = useSearchParams();
@@ -725,9 +724,10 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
           </div>
         }
       >
-        {imageSrc && (
+        {/* 이미지 */}
+        {imageSrc && !imageError && (
           <ImageContainer>
-            <Suspense fallback={<SkeletonImage isLoaded={false} />}>
+            <Suspense fallback={<SkeletonImage />}>
               <SuspenseImage
                 src={imageSrc}
                 alt={post.title || "게시물 이미지"}
@@ -738,6 +738,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
 
         {/* 본문 내용 */}
         <ContentContainer dangerouslySetInnerHTML={{ __html: htmlContent }} />
+
         {/* 메타 정보 */}
         <MetaContainer>
           <DateText>{format(new Date(post.date), "yyyy년 M월 d일")}</DateText>
@@ -756,9 +757,11 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
             </CategoriesContainer>
           )}
         </MetaContainer>
+
         <FooterContainer>
           <BackLink href={getLastVisitedPath()}>← 메인으로 돌아가기</BackLink>
         </FooterContainer>
+
         {/* 최근 게시물 섹션 */}
         {recentPosts.length > 0 && (
           <RecentPostsSection>
