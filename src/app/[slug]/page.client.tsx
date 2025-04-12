@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { Post } from "@/types";
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import styled, { keyframes } from "styled-components";
 
 interface PostClientProps {
@@ -359,91 +359,6 @@ const ConfirmButton = styled.button<{ disabled?: boolean }>`
   }
 `;
 
-// 마지막 방문 페이지 정보를 관리하는 훅
-function useLastVisitedPage() {
-  const searchParams = useSearchParams();
-
-  // 세션 스토리지에 이전 페이지 정보 저장
-  const saveLastVisitedState = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const category =
-        searchParams.get("refCategory") ||
-        searchParams.get("category") ||
-        localStorage.getItem("lastCategory") ||
-        "all";
-      const page =
-        searchParams.get("refPage") ||
-        searchParams.get("page") ||
-        localStorage.getItem("lastPage") ||
-        "1";
-
-      const lastState = {
-        category,
-        page,
-        timestamp: Date.now(),
-      };
-
-      sessionStorage.setItem("lastVisitedState", JSON.stringify(lastState));
-      localStorage.setItem("lastCategory", category);
-      localStorage.setItem("lastPage", page);
-    }
-  }, [searchParams]);
-
-  // 이전 페이지 경로 가져오기
-  const getLastVisitedPath = useCallback(() => {
-    if (typeof window === "undefined") return "/";
-
-    try {
-      // 세션 스토리지에서 마지막 상태 가져오기
-      const lastStateStr = sessionStorage.getItem("lastVisitedState");
-
-      if (lastStateStr) {
-        const lastState = JSON.parse(lastStateStr);
-        // 24시간(86400000ms) 이내의 상태만 유효하게 처리
-        if (Date.now() - lastState.timestamp < 86400000) {
-          const params = new URLSearchParams();
-
-          if (lastState.category && lastState.category !== "all") {
-            params.set("category", lastState.category);
-          }
-
-          if (lastState.page && lastState.page !== "1") {
-            params.set("page", lastState.page);
-          }
-
-          const queryString = params.toString();
-          return queryString ? `/?${queryString}` : "/";
-        }
-      }
-
-      // 로컬 스토리지에서 가져오기 (세션 스토리지에 없는 경우)
-      const category = localStorage.getItem("lastCategory");
-      const page = localStorage.getItem("lastPage");
-
-      if (category || page) {
-        const params = new URLSearchParams();
-
-        if (category && category !== "all") {
-          params.set("category", category);
-        }
-
-        if (page && page !== "1") {
-          params.set("page", page);
-        }
-
-        const queryString = params.toString();
-        return queryString ? `/?${queryString}` : "/";
-      }
-    } catch (e) {
-      console.error("Failed to parse last visited state:", e);
-    }
-
-    return "/";
-  }, []);
-
-  return { saveLastVisitedState, getLastVisitedPath };
-}
-
 // 최근 게시물 컴포넌트 스타일링
 const RecentPostsSection = styled.section`
   margin-top: 3rem;
@@ -585,45 +500,12 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { saveLastVisitedState, getLastVisitedPath } = useLastVisitedPage();
 
   // 이전 페이지 정보 저장 및 관리
   const [prevPageInfo, setPrevPageInfo] = useState({
     category: "",
     page: "1",
   });
-
-  // 컴포넌트 마운트 시 이미지 URL과 이전 페이지 정보 설정
-  useEffect(() => {
-    // 이전 페이지 정보 저장
-    saveLastVisitedState();
-
-    // 이전 페이지 정보 가져오기
-    const refererCategory =
-      searchParams.get("refCategory") ||
-      localStorage.getItem("lastCategory") ||
-      "all";
-    const refererPage =
-      searchParams.get("refPage") || localStorage.getItem("lastPage") || "1";
-
-    setPrevPageInfo({
-      category: refererCategory,
-      page: refererPage,
-    });
-
-    // 이미지 URL 설정
-    if (post.thumbnail) {
-      let url = post.thumbnail;
-      if (!url.startsWith("/")) {
-        url = `/${url}`;
-      }
-      setImageSrc(`${url}?t=${Date.now()}`);
-    }
-
-    // 최근 글 가져오기
-    fetchRecentPosts();
-  }, [post.thumbnail, searchParams, saveLastVisitedState]);
 
   // 최근 글 가져오기 함수
   const fetchRecentPosts = async () => {
@@ -645,11 +527,6 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
   };
 
   // 이전 페이지로 돌아가는 함수 (버튼 클릭용)
-  const handleBackToHome = useCallback(() => {
-    const lastPath = getLastVisitedPath();
-    router.push(lastPath);
-  }, [getLastVisitedPath, router]);
-
   // 삭제 확인
   const handleDeleteClick = () => {
     setShowDeleteConfirm(true);
@@ -673,7 +550,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
 
       if (response.ok) {
         // 삭제 성공 시 홈으로 이동
-        router.push(getLastVisitedPath());
+        router.back();
         router.refresh();
       } else {
         const data = await response.json();
@@ -759,7 +636,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
         </MetaContainer>
 
         <FooterContainer>
-          <BackLink href={getLastVisitedPath()}>← 메인으로 돌아가기</BackLink>
+          <BackLink href={"/"}>← 메인으로 돌아가기</BackLink>
         </FooterContainer>
 
         {/* 최근 게시물 섹션 */}
