@@ -6,10 +6,11 @@ export const FlexContainer = styled.div`
   min-height: 100vh;
   width: 100%;
   position: relative;
+  align-items: center;
 `;
 
 export const Main = styled.main`
-  max-width: 1280px;
+  max-width: 60rem;
   width: 100%;
   margin-left: auto;
   margin-right: auto;

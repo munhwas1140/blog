@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 export const HeaderContainer = styled.header`
+  min-width: 24rem;
   padding: 1.25rem 0;
   margin-bottom: 2rem;
   border-bottom: 1px solid #f3f4f6;

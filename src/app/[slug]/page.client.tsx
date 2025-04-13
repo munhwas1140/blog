@@ -15,20 +15,10 @@ import {
 import { styled } from 'styled-components';
 
 const ArticleContainer = styled.article`
-  max-width: 48rem;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 3rem;
   overflow-x: hidden; /* 수평 스크롤 방지 */
   contain: paint; /* 레이아웃 시프트 방지 */
-
-  /* 최소 높이 설정으로 내용이 로드되기 전에 공간 확보 */
   min-height: 80vh;
-
-  @media (max-width: 640px) {
-    padding-bottom: 2rem;
-  }
 `;
 
 interface PostClientProps {
@@ -39,7 +29,6 @@ interface PostClientProps {
 function PostClient({ post, htmlContent }: PostClientProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const router = useRouter();
