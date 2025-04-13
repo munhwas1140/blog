@@ -82,6 +82,7 @@ const LogoText = styled.span`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 0.75rem;
 `;
 
 const WriteButton = styled(Link)`
@@ -95,6 +96,63 @@ const WriteButton = styled(Link)`
 
   &:hover {
     background-color: #1f2937;
+  }
+`;
+
+const ThreeJsButton = styled(Link)`
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4f46e5;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: rotate(45deg);
+    background-color: #4338ca;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: #c4b5fd;
+    border-radius: 0.2rem;
+    animation: rotate 4s linear infinite;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 0.6rem;
+    height: 0.6rem;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(-5px);
+    }
+    50% {
+      transform: translateY(5px);
+    }
   }
 `;
 
@@ -112,6 +170,11 @@ export default function Header() {
           </LogoLink>
           <ButtonContainer>
             <WriteButton href="/write">글 쓰기</WriteButton>
+            <ThreeJsButton
+              href="/three"
+              aria-label="Three.js 데모"
+              title="Three.js 데모"
+            />
           </ButtonContainer>
         </Flex>
       </Container>
