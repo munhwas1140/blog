@@ -3,55 +3,20 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Post } from '@/types';
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import {
   PostContainer,
   PostTitle,
   PostTitleLink,
   ImageContainer,
   SkeletonImage,
-  PostImage,
   PostExcerpt,
   MetaContainer,
   CategoryContainer,
   CategoryLabel,
   CategoryLink,
 } from './PostCard.styles';
-
-// SuspenseImage 컴포넌트를 로컬로 유지합니다
-// 이미지 로딩을 위한 Suspense 이미지 컴포넌트
-function SuspenseImage({ src, alt }: { src: string; alt: string }) {
-  const [loaded, setLoaded] = useState(false);
-  const imageRef = useRef<HTMLImageElement>(null);
-
-  // 이미지 로드 완료 처리
-  const handleImageLoad = () => {
-    setLoaded(true);
-  };
-
-  // 이미지 로드 오류 처리
-  const handleImageError = () => {
-    console.error('이미지 로드 실패:', src);
-  };
-
-  // 이미 캐시된 이미지인지 확인
-  useEffect(() => {
-    if (imageRef.current?.complete) {
-      setLoaded(true);
-    }
-  }, [src]);
-
-  return (
-    <PostImage
-      ref={imageRef}
-      src={src}
-      alt={alt}
-      onError={handleImageError}
-      onLoad={handleImageLoad}
-      className={loaded ? 'loaded' : ''}
-    />
-  );
-}
+import { SuspenseImage } from '@/components';
 
 interface PostCardProps {
   post: Post;

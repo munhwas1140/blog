@@ -83,9 +83,3 @@ export const ScrollTopButton = styled.button<ScrollTopButtonProps>`
     font-size: 20px;
   }
 `;
-
-export const ScrollIcon = styled.svg`
-  width: 1.5rem;
-  height: 1.5rem;
-  stroke-width: 2.5;
-`;

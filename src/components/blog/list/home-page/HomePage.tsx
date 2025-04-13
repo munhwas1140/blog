@@ -12,7 +12,6 @@ import {
   EmptyPostsMessage,
   EmptyText,
   ScrollTopButton,
-  ScrollIcon,
 } from './HomePage.styles';
 import { PostList, CategorySelector, ChevronUpIcon } from '@/components';
 
