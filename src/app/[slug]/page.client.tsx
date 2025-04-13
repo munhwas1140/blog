@@ -6,6 +6,8 @@ import { Post } from "@/types";
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import styled, { keyframes } from "styled-components";
+import RecentPostSuspenseImage from "@/components/skeleton/RecentPostSuspenseImage";
+import SuspenseImage from "@/components/skeleton/SuspenseImage";
 
 interface PostClientProps {
   post: Post;
@@ -91,69 +93,6 @@ const SkeletonImage = styled.div`
   animation: ${shimmer} 1.5s infinite linear;
   z-index: 1;
 `;
-
-const PostImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0.5rem;
-`;
-
-// Suspense를 사용한 이미지 컴포넌트 수정
-function SuspenseImage({ src, alt }: { src: string; alt: string }) {
-  const [error, setError] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onerror = () => {
-      setError(true);
-      console.error("이미지 로드 실패:", src);
-    };
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [src]);
-
-  // 에러 처리
-  if (error) {
-    return (
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#f3f4f6",
-        }}
-      >
-        <p>이미지를 불러올 수 없습니다</p>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <PostImage
-        ref={imgRef}
-        src={src}
-        alt={alt}
-        onError={() => setError(true)}
-      />
-    </div>
-  );
-}
 
 const ContentContainer = styled.div`
   margin-bottom: 2.5rem;
@@ -412,12 +351,6 @@ const RecentPostImageContainer = styled.div`
   background-color: #f3f4f6;
 `;
 
-const RecentPostImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
 const RecentPostInfo = styled.div`
   padding: 1rem;
 `;
@@ -436,62 +369,6 @@ const RecentPostDate = styled.p`
   font-size: 0.875rem;
   color: #6b7280;
 `;
-
-// 최근 게시물용 Suspense 이미지 컴포넌트 수정
-function RecentPostSuspenseImage({ src, alt }: { src: string; alt: string }) {
-  const [error, setError] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onerror = () => {
-      setError(true);
-      console.error("이미지 로드 실패:", src);
-    };
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [src]);
-
-  // 에러 처리
-  if (error) {
-    return (
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#f3f4f6",
-        }}
-      >
-        <p>이미지를 불러올 수 없습니다</p>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <RecentPostImage
-        ref={imgRef}
-        src={src}
-        alt={alt}
-        onError={() => setError(true)}
-      />
-    </div>
-  );
-}
 
 export default function PostClient({ post, htmlContent }: PostClientProps) {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -564,11 +441,6 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
     }
   };
 
-  // 이미지 오류 처리
-  const handleImageError = () => {
-    setImageError(true);
-  };
-
   // 위로 스크롤
   const scrollToTop = () => {
     window.scrollTo({
@@ -585,7 +457,6 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
 
       <PostTitle>{post.title}</PostTitle>
 
-      {/* 전체 컨텐츠를 Suspense로 감싸서 UI 밀림 현상 방지 */}
       <Suspense
         fallback={
           <div

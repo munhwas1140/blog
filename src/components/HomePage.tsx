@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Post } from "@/types";
 import PostList from "./PostList";
 import CategorySelector from "./CategorySelector";
-import { filterPostsByCategory } from "@/lib/posts";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import styled from "styled-components";
 
