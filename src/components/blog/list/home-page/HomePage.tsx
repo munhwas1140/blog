@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Post } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import TitleIcon from '../../../../../public/title.svg';
+import TitleBanner from '../../../../../public/title.svg';
 import {
   Container,
   HeaderSection,
@@ -12,7 +12,7 @@ import {
   EmptyPostsMessage,
   EmptyText,
   ScrollTopButton,
-  TitleIconWrapper,
+  TitleBannerWrapper,
 } from './HomePage.styles';
 import { PostList, CategorySelector, ChevronUpIcon } from '@/components';
 
@@ -107,9 +107,9 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
   return (
     <Container>
       <HeaderSection>
-        <TitleIconWrapper>
-          <TitleIcon width={454} />
-        </TitleIconWrapper>
+        <TitleBannerWrapper>
+          <TitleBanner width={454} />
+        </TitleBannerWrapper>
         <MainTitle>소리의 일기</MainTitle>
         <Description>
           옛날 옛적 소리라는 아이가 살았습니다.

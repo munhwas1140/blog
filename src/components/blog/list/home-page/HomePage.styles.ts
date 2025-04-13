@@ -26,7 +26,7 @@ export const HeaderSection = styled.div`
   }
 `;
 
-export const TitleIconWrapper = styled.div`
+export const TitleBannerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
