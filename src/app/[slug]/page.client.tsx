@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
-import Link from "next/link";
-import { Post } from "@/types";
-import { useState, useEffect, useRef, useCallback, Suspense } from "react";
-import { useRouter } from "next/navigation";
-import styled, { keyframes } from "styled-components";
-import RecentPostSuspenseImage from "@/components/skeleton/RecentPostSuspenseImage";
-import SuspenseImage from "@/components/skeleton/SuspenseImage";
+import { format } from 'date-fns';
+import Link from 'next/link';
+import { Post } from '@/types';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import styled, { keyframes } from 'styled-components';
+import { RecentPostSuspenseImage, SuspenseImage } from '@/components';
 
 interface PostClientProps {
   post: Post;
@@ -213,7 +212,8 @@ const ScrollTopButton = styled.button`
   width: 3rem;
   height: 3rem;
   border-radius: 9999px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
@@ -245,7 +245,8 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   max-width: 28rem;
   width: 100%;
@@ -329,11 +330,14 @@ const RecentPostCard = styled.article`
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 `;
@@ -380,26 +384,26 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
 
   // 이전 페이지 정보 저장 및 관리
   const [prevPageInfo, setPrevPageInfo] = useState({
-    category: "",
-    page: "1",
+    category: '',
+    page: '1',
   });
 
   // 최근 글 가져오기 함수
   const fetchRecentPosts = async () => {
     try {
       // API 호출
-      const response = await fetch("/api/posts?limit=3");
+      const response = await fetch('/api/posts?limit=3');
       if (response.ok) {
         const data = await response.json();
         // 현재 글은 최근 글 목록에서 제외
         setRecentPosts(
-          data.posts.filter((p: Post) => p.slug !== post.slug).slice(0, 3)
+          data.posts.filter((p: Post) => p.slug !== post.slug).slice(0, 3),
         );
       } else {
-        console.error("최근 게시물 요청 실패:", response.status);
+        console.error('최근 게시물 요청 실패:', response.status);
       }
     } catch (error) {
-      console.error("최근 글을 불러오는데 실패했습니다:", error);
+      console.error('최근 글을 불러오는데 실패했습니다:', error);
     }
   };
 
@@ -422,7 +426,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
       setIsDeleting(true);
 
       const response = await fetch(`/api/posts/${post.slug}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (response.ok) {
@@ -431,10 +435,10 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
         router.refresh();
       } else {
         const data = await response.json();
-        alert(`삭제 실패: ${data.error || "알 수 없는 오류"}`);
+        alert(`삭제 실패: ${data.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
-      alert("글 삭제 중 오류가 발생했습니다.");
+      alert('글 삭제 중 오류가 발생했습니다.');
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
@@ -445,7 +449,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
@@ -461,11 +465,11 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
         fallback={
           <div
             style={{
-              width: "100%",
-              minHeight: "50vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              width: '100%',
+              minHeight: '50vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <div>콘텐츠를 불러오는 중...</div>
@@ -478,7 +482,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
             <Suspense fallback={<SkeletonImage />}>
               <SuspenseImage
                 src={imageSrc}
-                alt={post.title || "게시물 이미지"}
+                alt={post.title || '게시물 이미지'}
               />
             </Suspense>
           </ImageContainer>
@@ -489,7 +493,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
 
         {/* 메타 정보 */}
         <MetaContainer>
-          <DateText>{format(new Date(post.date), "yyyy년 M월 d일")}</DateText>
+          <DateText>{format(new Date(post.date), 'yyyy년 M월 d일')}</DateText>
 
           {post.categories && post.categories.length > 0 && (
             <CategoriesContainer>
@@ -499,7 +503,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
                   <CategoryLink href={`/?category=${category}`}>
                     {category}
                   </CategoryLink>
-                  {index < post.categories!.length - 1 && ", "}
+                  {index < post.categories!.length - 1 && ', '}
                 </CategorySpan>
               ))}
             </CategoriesContainer>
@@ -507,7 +511,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
         </MetaContainer>
 
         <FooterContainer>
-          <BackLink href={"/"}>← 메인으로 돌아가기</BackLink>
+          <BackLink href={'/'}>← 메인으로 돌아가기</BackLink>
         </FooterContainer>
 
         {/* 최근 게시물 섹션 */}
@@ -523,7 +527,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
                         <Suspense fallback={<SkeletonImage />}>
                           <RecentPostSuspenseImage
                             src={
-                              recentPost.thumbnail.startsWith("/")
+                              recentPost.thumbnail.startsWith('/')
                                 ? recentPost.thumbnail
                                 : `/${recentPost.thumbnail}`
                             }
@@ -535,7 +539,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
                     <RecentPostInfo>
                       <RecentPostTitle>{recentPost.title}</RecentPostTitle>
                       <RecentPostDate>
-                        {format(new Date(recentPost.date), "yyyy년 M월 d일")}
+                        {format(new Date(recentPost.date), 'yyyy년 M월 d일')}
                       </RecentPostDate>
                     </RecentPostInfo>
                   </RecentPostLink>
@@ -579,7 +583,7 @@ export default function PostClient({ post, htmlContent }: PostClientProps) {
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
               >
-                {isDeleting ? "삭제 중..." : "삭제"}
+                {isDeleting ? '삭제 중...' : '삭제'}
               </ConfirmButton>
             </ModalButtonContainer>
           </ModalContent>

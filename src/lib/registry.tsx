@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useServerInsertedHTML } from "next/navigation";
-import { ServerStyleSheet, StyleSheetManager } from "styled-components";
+import React, { useState } from 'react';
+import { useServerInsertedHTML } from 'next/navigation';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 export default function StyledComponentsRegistry({
   children,
@@ -20,7 +20,7 @@ export default function StyledComponentsRegistry({
   });
 
   // 클라이언트에서는 일반적인 렌더링
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     return <>{children}</>;
   }
 

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { savePost, getAllPosts } from "@/lib/server/posts";
-import { Post } from "@/types";
+import { NextRequest, NextResponse } from 'next/server';
+import { savePost, getAllPosts } from '@/lib/server/posts';
+import { Post } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
     // 필수 필드 확인
     if (!postData.title || !postData.content) {
       return NextResponse.json(
-        { error: "Required fields missing" },
-        { status: 400 }
+        { error: 'Required fields missing' },
+        { status: 400 },
       );
     }
 
@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
       postData.slug =
         postData.title
           .toLowerCase()
-          .replace(/[^a-z0-9가-힣]/g, "-")
-          .replace(/-+/g, "-")
-          .replace(/^-|-$/g, "") +
-        "-" +
+          .replace(/[^a-z0-9가-힣]/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '') +
+        '-' +
         timestamp;
     }
 
@@ -43,15 +43,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, slug: postData.slug });
     } else {
       return NextResponse.json(
-        { error: "Failed to save post" },
-        { status: 500 }
+        { error: 'Failed to save post' },
+        { status: 500 },
       );
     }
   } catch (error) {
-    console.error("Error in POST /api/posts:", error);
+    console.error('Error in POST /api/posts:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: 'Internal server error' },
+      { status: 500 },
     );
   }
 }
@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const limit = searchParams.get("limit")
-      ? parseInt(searchParams.get("limit")!)
+    const limit = searchParams.get('limit')
+      ? parseInt(searchParams.get('limit')!)
       : 3;
 
     // 모든 게시물 가져오기
@@ -77,10 +77,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ posts: recentPosts });
   } catch (error) {
-    console.error("Error in GET /api/posts:", error);
+    console.error('Error in GET /api/posts:', error);
     return NextResponse.json(
-      { error: "Failed to fetch recent posts" },
-      { status: 500 }
+      { error: 'Failed to fetch recent posts' },
+      { status: 500 },
     );
   }
 }

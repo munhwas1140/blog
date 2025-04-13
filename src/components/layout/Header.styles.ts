@@ -1,16 +1,14 @@
-"use client";
+import styled from 'styled-components';
+import Link from 'next/link';
 
-import Link from "next/link";
-import styled from "styled-components";
-
-const HeaderContainer = styled.header`
+export const HeaderContainer = styled.header`
   padding: 1.25rem 0;
   margin-bottom: 2rem;
   border-bottom: 1px solid #f3f4f6;
   width: 100%;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   max-width: 1280px;
   width: 100%;
   margin-left: auto;
@@ -24,14 +22,14 @@ const Container = styled.div`
   }
 `;
 
-const Flex = styled.div`
+export const Flex = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
 
-const LogoLink = styled(Link)`
+export const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -42,13 +40,13 @@ const LogoLink = styled(Link)`
   }
 `;
 
-const LogoContainer = styled.div`
+export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
 `;
 
-const BlueLogo = styled.div`
+export const BlueLogo = styled.div`
   width: 2rem;
   height: 2rem;
   background-color: #3b82f6;
@@ -60,7 +58,7 @@ const BlueLogo = styled.div`
   }
 `;
 
-const GreenLogo = styled.div`
+export const GreenLogo = styled.div`
   width: 2rem;
   height: 2rem;
   background-color: #22c55e;
@@ -73,19 +71,19 @@ const GreenLogo = styled.div`
   }
 `;
 
-const LogoText = styled.span`
+export const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
 `;
 
-const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
 `;
 
-const WriteButton = styled(Link)`
+export const WriteButton = styled(Link)`
   background-color: black;
   color: white;
   padding: 0.5rem 1rem;
@@ -99,7 +97,7 @@ const WriteButton = styled(Link)`
   }
 `;
 
-const ThreeJsButton = styled(Link)`
+export const ThreeJsButton = styled(Link)`
   position: relative;
   width: 2.5rem;
   height: 2.5rem;
@@ -117,7 +115,7 @@ const ThreeJsButton = styled(Link)`
   }
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     width: 1.2rem;
     height: 1.2rem;
@@ -136,7 +134,7 @@ const ThreeJsButton = styled(Link)`
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     width: 0.6rem;
     height: 0.6rem;
@@ -155,29 +153,3 @@ const ThreeJsButton = styled(Link)`
     }
   }
 `;
-
-export default function Header() {
-  return (
-    <HeaderContainer>
-      <Container>
-        <Flex>
-          <LogoLink href="/">
-            <LogoContainer>
-              <BlueLogo />
-              <GreenLogo />
-            </LogoContainer>
-            <LogoText>소리의 일기</LogoText>
-          </LogoLink>
-          <ButtonContainer>
-            <WriteButton href="/write">글 쓰기</WriteButton>
-            <ThreeJsButton
-              href="/three"
-              aria-label="Three.js 데모"
-              title="Three.js 데모"
-            />
-          </ButtonContainer>
-        </Flex>
-      </Container>
-    </HeaderContainer>
-  );
-}

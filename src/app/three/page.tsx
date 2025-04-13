@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import styled from "styled-components";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
 
 const Container = styled.div`
   position: fixed;
@@ -55,7 +55,9 @@ const HelpTooltip = styled.div`
   z-index: 10;
   opacity: 0;
   transform: translateX(-50%) translateY(20px);
-  animation: fadeInUp 0.5s forwards, fadeOut 0.5s forwards 5s;
+  animation:
+    fadeInUp 0.5s forwards,
+    fadeOut 0.5s forwards 5s;
 
   @keyframes fadeInUp {
     to {
@@ -111,7 +113,7 @@ export default function ThreeDemoPage() {
       45,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
     camera.position.set(12, 9, 18);
     camera.lookAt(0, 0, 0);
@@ -172,7 +174,7 @@ export default function ThreeDemoPage() {
       lineWidth,
       lineWidth,
       axisLength - headLength,
-      8
+      8,
     );
     const xAxisMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     const xAxis = new THREE.Mesh(xAxisGeometry, xAxisMaterial);
@@ -192,7 +194,7 @@ export default function ThreeDemoPage() {
       lineWidth,
       lineWidth,
       axisLength - headLength,
-      8
+      8,
     );
     const yAxisMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const yAxis = new THREE.Mesh(yAxisGeometry, yAxisMaterial);
@@ -210,7 +212,7 @@ export default function ThreeDemoPage() {
       lineWidth,
       lineWidth,
       axisLength - headLength,
-      8
+      8,
     );
     const zAxisMaterial = new THREE.MeshBasicMaterial({ color: 0x0033ff });
     const zAxis = new THREE.Mesh(zAxisGeometry, zAxisMaterial);
@@ -231,21 +233,21 @@ export default function ThreeDemoPage() {
     const createLabel = (
       text: string,
       position: THREE.Vector3,
-      color: number
+      color: number,
     ) => {
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       canvas.width = 64;
       canvas.height = 64;
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext('2d');
 
       if (context) {
-        context.fillStyle = "rgba(0, 0, 0, 0)";
+        context.fillStyle = 'rgba(0, 0, 0, 0)';
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        context.font = "bold 24px Arial";
-        context.fillStyle = `#${color.toString(16).padStart(6, "0")}`;
-        context.textAlign = "center";
-        context.textBaseline = "middle";
+        context.font = 'bold 24px Arial';
+        context.fillStyle = `#${color.toString(16).padStart(6, '0')}`;
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
         context.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
@@ -266,19 +268,19 @@ export default function ThreeDemoPage() {
 
     // 축 라벨 추가 (위치 조정)
     const labelX = createLabel(
-      "X",
+      'X',
       new THREE.Vector3(axisLength + 0.1, 0, 0),
-      0xff0000
+      0xff0000,
     );
     const labelY = createLabel(
-      "Y",
+      'Y',
       new THREE.Vector3(0, axisLength + 0.1, 0),
-      0x00ff00
+      0x00ff00,
     );
     const labelZ = createLabel(
-      "Z",
+      'Z',
       new THREE.Vector3(0, 0, axisLength + 0.1),
-      0x0033ff
+      0x0033ff,
     );
 
     if (labelX) axesScene.add(labelX);
@@ -431,7 +433,7 @@ export default function ThreeDemoPage() {
     function isDirectlyConnected(a: number, b: number): boolean {
       return edges.some(
         ([start, end]) =>
-          (start === a && end === b) || (start === b && end === a)
+          (start === a && end === b) || (start === b && end === a),
       );
     }
 
@@ -454,7 +456,7 @@ export default function ThreeDemoPage() {
       renderer.setSize(width, height);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     // 애니메이션 함수
     const animate = () => {
@@ -535,11 +537,11 @@ export default function ThreeDemoPage() {
         // 새 경로 계산
         paths[0] = findPathAlongEdges(
           currentPositionIndices[0],
-          targetPositionIndices[0]
+          targetPositionIndices[0],
         );
         paths[1] = findPathAlongEdges(
           currentPositionIndices[1],
-          targetPositionIndices[1]
+          targetPositionIndices[1],
         );
       }
 
@@ -607,7 +609,7 @@ export default function ThreeDemoPage() {
           fadeColor.lerpColors(
             new THREE.Color(0x0033cc), // 파란색에서 시작
             new THREE.Color(0x333333), // 최종 색상 (어두운 회색)
-            fadeRatio
+            fadeRatio,
           );
 
           material.color = fadeColor;
@@ -622,14 +624,14 @@ export default function ThreeDemoPage() {
     function updatePointPosition(
       point: THREE.Mesh,
       path: number[],
-      progress: number
+      progress: number,
     ) {
       if (path.length === 2) {
         // 직접 연결된 경우 (한 번에 이동)
         point.position.lerpVectors(
           cornerPositions[path[0]],
           cornerPositions[path[1]],
-          progress
+          progress,
         );
       } else if (path.length === 3) {
         // 중간 경유지가 있는 경우 (두 번에 나눠 이동)
@@ -638,14 +640,14 @@ export default function ThreeDemoPage() {
           point.position.lerpVectors(
             cornerPositions[path[0]],
             cornerPositions[path[1]],
-            progress * 2
+            progress * 2,
           );
         } else {
           // 두 번째 구간
           point.position.lerpVectors(
             cornerPositions[path[1]],
             cornerPositions[path[2]],
-            (progress - 0.5) * 2
+            (progress - 0.5) * 2,
           );
         }
       } else if (path.length === 4) {
@@ -654,19 +656,19 @@ export default function ThreeDemoPage() {
           point.position.lerpVectors(
             cornerPositions[path[0]],
             cornerPositions[path[1]],
-            progress * 3
+            progress * 3,
           );
         } else if (progress < 0.66) {
           point.position.lerpVectors(
             cornerPositions[path[1]],
             cornerPositions[path[2]],
-            (progress - 0.33) * 3
+            (progress - 0.33) * 3,
           );
         } else {
           point.position.lerpVectors(
             cornerPositions[path[2]],
             cornerPositions[path[3]],
-            (progress - 0.66) * 3
+            (progress - 0.66) * 3,
           );
         }
       }
@@ -676,14 +678,14 @@ export default function ThreeDemoPage() {
     function calculatePointPosition(
       path: number[],
       progress: number,
-      target: THREE.Vector3
+      target: THREE.Vector3,
     ) {
       if (path.length === 2) {
         // 직접 연결된 경우 (한 번에 이동)
         target.lerpVectors(
           cornerPositions[path[0]],
           cornerPositions[path[1]],
-          progress
+          progress,
         );
       } else if (path.length === 3) {
         // 중간 경유지가 있는 경우 (두 번에 나눠 이동)
@@ -692,14 +694,14 @@ export default function ThreeDemoPage() {
           target.lerpVectors(
             cornerPositions[path[0]],
             cornerPositions[path[1]],
-            progress * 2
+            progress * 2,
           );
         } else {
           // 두 번째 구간
           target.lerpVectors(
             cornerPositions[path[1]],
             cornerPositions[path[2]],
-            (progress - 0.5) * 2
+            (progress - 0.5) * 2,
           );
         }
       } else if (path.length === 4) {
@@ -708,19 +710,19 @@ export default function ThreeDemoPage() {
           target.lerpVectors(
             cornerPositions[path[0]],
             cornerPositions[path[1]],
-            progress * 3
+            progress * 3,
           );
         } else if (progress < 0.66) {
           target.lerpVectors(
             cornerPositions[path[1]],
             cornerPositions[path[2]],
-            (progress - 0.33) * 3
+            (progress - 0.33) * 3,
           );
         } else {
           target.lerpVectors(
             cornerPositions[path[2]],
             cornerPositions[path[3]],
-            (progress - 0.66) * 3
+            (progress - 0.66) * 3,
           );
         }
       }
@@ -776,7 +778,7 @@ export default function ThreeDemoPage() {
         cancelAnimationFrame(animationId);
       }
 
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
 
       // Controls 정리
       controls.dispose();

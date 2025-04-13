@@ -1,6 +1,6 @@
-import { getAllPosts, getAllCategories } from "@/lib/server/posts";
-import HomePage from "@/components/HomePage";
-import { Suspense } from "react";
+import { getAllPosts, getAllCategories } from '@/lib/server/posts';
+import { HomePage } from '@/components';
+import { Suspense } from 'react';
 
 // 서버 컴포넌트 - 'use client' 지시문이 없음
 export default function Page() {
