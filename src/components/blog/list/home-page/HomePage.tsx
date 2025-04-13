@@ -12,6 +12,7 @@ import {
   EmptyPostsMessage,
   EmptyText,
   ScrollTopButton,
+  TitleIconWrapper,
 } from './HomePage.styles';
 import { PostList, CategorySelector, ChevronUpIcon } from '@/components';
 
@@ -106,7 +107,9 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
   return (
     <Container>
       <HeaderSection>
-        <TitleIcon />
+        <TitleIconWrapper>
+          <TitleIcon width={454} />
+        </TitleIconWrapper>
         <MainTitle>소리의 일기</MainTitle>
         <Description>
           옛날 옛적 소리라는 아이가 살았습니다.

@@ -26,11 +26,28 @@ export const HeaderSection = styled.div`
   }
 `;
 
+export const TitleIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  max-width: 100%;
+  height: auto;
+`;
+
 export const MainTitle = styled.h1`
   font-size: 2.25rem;
   font-weight: 800;
   margin-bottom: 1rem;
   color: #111827;
+
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
 `;
 
 export const Description = styled.p`
@@ -39,6 +56,11 @@ export const Description = styled.p`
   margin-left: auto;
   margin-right: auto;
   line-height: 1.7;
+
+  @media (max-width: 640px) {
+    font-size: 0.95rem;
+    padding: 0 1rem;
+  }
 `;
 
 export const EmptyPostsMessage = styled.div`
