@@ -8,8 +8,7 @@ export * from './blog';
 export * from './form';
 
 // Common Components
-export { default as SuspenseImage } from './common/skeleton/SuspenseImage';
-export { default as RecentPostSuspenseImage } from './common/skeleton/RecentPostSuspenseImage';
+export * from './common';
 
 // Icon Components
 export * from './icons';

@@ -1,34 +1,28 @@
 'use client';
 
 import { Suspense } from 'react';
-import { SuspenseImage } from '@/components';
-import {
-  ImageContainer,
-  ContentContainer,
-  SkeletonImage,
-} from './PostContent.styles';
+import { SuspenseImage } from '@/components/common/suspense';
+import { ImageContainer, ContentContainer } from './PostContent.styles';
+import { Post } from '@/types';
 
 interface PostContentProps {
   htmlContent: string;
-  imageSrc: string | null;
-  imageError: boolean;
-  title: string;
+  post: Post;
 }
 
-function PostContent({
-  htmlContent,
-  imageSrc,
-  imageError,
-  title,
-}: PostContentProps) {
+function PostContent({ htmlContent, post }: PostContentProps) {
   return (
     <>
-      {/* 이미지 */}
-      {imageSrc && !imageError && (
+      {post.thumbnail && (
         <ImageContainer>
-          <Suspense fallback={<SkeletonImage />}>
-            <SuspenseImage src={imageSrc} alt={title || '게시물 이미지'} />
-          </Suspense>
+          <SuspenseImage
+            src={
+              post.thumbnail.startsWith('/')
+                ? post.thumbnail
+                : `/${post.thumbnail}`
+            }
+            alt={post.title || '게시물 이미지'}
+          />
         </ImageContainer>
       )}
 

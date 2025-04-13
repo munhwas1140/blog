@@ -9,14 +9,13 @@ import {
   PostTitle,
   PostTitleLink,
   ImageContainer,
-  SkeletonImage,
   PostExcerpt,
   MetaContainer,
   CategoryContainer,
   CategoryLabel,
   CategoryLink,
 } from './PostCard.styles';
-import SuspenseImage from '@/components/common/skeleton/SuspenseImage';
+import { SuspenseImage } from '@/components/common/suspense';
 
 interface PostCardProps {
   post: Post;
@@ -53,12 +52,10 @@ export default function PostCard({ post }: PostCardProps) {
         <Link href={`/${post.slug}`}>
           <ImageContainer>
             {imageSrc && (
-              <Suspense fallback={<SkeletonImage isLoaded={false} />}>
-                <SuspenseImage
-                  src={imageSrc}
-                  alt={post.title || '게시물 이미지'}
-                />
-              </Suspense>
+              <SuspenseImage
+                src={imageSrc}
+                alt={post.title || '게시물 이미지'}
+              />
             )}
           </ImageContainer>
         </Link>

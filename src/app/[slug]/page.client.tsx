@@ -10,6 +10,7 @@ import {
   RecentPosts,
   DeleteConfirmModal,
   ScrollTopButton,
+  ChevronUpIcon,
 } from '@/components';
 import { styled } from 'styled-components';
 
@@ -19,6 +20,11 @@ const ArticleContainer = styled.article`
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 3rem;
+  overflow-x: hidden; /* 수평 스크롤 방지 */
+  contain: paint; /* 레이아웃 시프트 방지 */
+
+  /* 최소 높이 설정으로 내용이 로드되기 전에 공간 확보 */
+  min-height: 80vh;
 
   @media (max-width: 640px) {
     padding-bottom: 2rem;
@@ -35,6 +41,7 @@ function PostClient({ post, htmlContent }: PostClientProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,6 +52,16 @@ function PostClient({ post, htmlContent }: PostClientProps) {
       );
     }
   }, [post.thumbnail]);
+
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 200);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // 삭제 확인
   const handleDeleteClick = () => {
@@ -83,38 +100,27 @@ function PostClient({ post, htmlContent }: PostClientProps) {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <ArticleContainer>
       <PostHeader title={post.title} onDeleteClick={handleDeleteClick} />
 
-      <Suspense
-        fallback={
-          <div
-            style={{
-              width: '100%',
-              minHeight: '50vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <div>콘텐츠를 불러오는 중...</div>
-          </div>
-        }
-      >
-        <PostContent
-          htmlContent={htmlContent}
-          imageSrc={imageSrc}
-          imageError={imageError}
-          title={post.title}
-        />
+      <PostContent htmlContent={htmlContent} post={post} />
 
-        <PostMeta date={post.date} categories={post.categories} />
+      <PostMeta date={post.date} categories={post.categories} />
 
-        <RecentPosts currentPostSlug={post.slug} />
-      </Suspense>
+      <RecentPosts currentPostSlug={post.slug} />
 
-      <ScrollTopButton />
+      {/* 스크롤 버튼 */}
+      <StyledScrollTopButton onClick={scrollToTop} $show={showScrollTop}>
+        <ChevronUpIcon strokeWidth={2.5} />
+      </StyledScrollTopButton>
 
       {/* 삭제 확인 모달 */}
       {showDeleteConfirm && (
@@ -127,5 +133,30 @@ function PostClient({ post, htmlContent }: PostClientProps) {
     </ArticleContainer>
   );
 }
+
+// ScrollTopButton 스타일 컴포넌트 정의
+const StyledScrollTopButton = styled.button<{ $show: boolean }>`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #3b82f6;
+  color: white;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 40;
+  opacity: ${(props) => (props.$show ? '1' : '0')};
+  visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
+
+  &:hover {
+    background-color: #2563eb;
+  }
+`;
 
 export default PostClient;

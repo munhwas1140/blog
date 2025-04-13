@@ -1,21 +1,18 @@
-// Suspense를 사용한 이미지 컴포넌트 수정
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
-const PostImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0.5rem;
-`;
-export default function SuspenseImage({
-  src,
-  alt,
-}: {
+import { useEffect, useRef, useState } from 'react';
+import {
+  RecentPostImage,
+  ErrorContainer,
+  ImageContainer,
+} from './RecentPostSuspenseImage.styles';
+
+export interface RecentPostSuspenseImageProps {
   src: string;
   alt: string;
-}) {
+}
+
+function RecentPostSuspenseImage({ src, alt }: RecentPostSuspenseImageProps) {
   const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -36,36 +33,22 @@ export default function SuspenseImage({
   // 에러 처리
   if (error) {
     return (
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f3f4f6',
-        }}
-      >
+      <ErrorContainer>
         <p>이미지를 불러올 수 없습니다</p>
-      </div>
+      </ErrorContainer>
     );
   }
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <PostImage
+    <ImageContainer>
+      <RecentPostImage
         ref={imgRef}
         src={src}
         alt={alt}
         onError={() => setError(true)}
       />
-    </div>
+    </ImageContainer>
   );
 }
+
+export default RecentPostSuspenseImage;

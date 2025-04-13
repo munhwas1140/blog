@@ -1,8 +1,8 @@
 'use client';
 
+import { SuspenseImage } from '@/components/common/suspense';
 import Link from 'next/link';
 import styled, { keyframes } from 'styled-components';
-import SuspenseImage from '@/components/common/skeleton/SuspenseImage';
 
 export const RecentPostsSection = styled.section`
   margin-top: 3rem;

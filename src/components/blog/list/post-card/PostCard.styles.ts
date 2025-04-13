@@ -49,42 +49,6 @@ export const ImageContainer = styled.div`
   position: relative; /* 포지션 관계 설정 */
   background-color: #f6f7f8; /* 기본 배경색 */
 `;
-
-export const shimmer = keyframes`
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-`;
-
-export interface SkeletonImageProps {
-  isLoaded: boolean;
-}
-
-export const SkeletonImage = styled.div<SkeletonImageProps>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
-  background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
-  background-size: 800px 100%;
-  animation: ${shimmer} 1.5s infinite linear;
-  z-index: 1; /* 이미지 아래에 위치 */
-  opacity: ${(props) => (props.isLoaded ? 0 : 1)};
-  transition: opacity 0.3s ease;
-`;
-
 export const PostImage = styled.img`
   position: absolute;
   top: 0;

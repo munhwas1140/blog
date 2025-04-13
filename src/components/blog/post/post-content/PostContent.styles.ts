@@ -10,6 +10,21 @@ export const ImageContainer = styled.div`
   overflow: hidden;
   border-radius: 0.5rem;
   background-color: #f6f7f8;
+  aspect-ratio: 16 / 9;
+
+  /* 이미지 로드 전에 최소 높이와 너비를 지정하여 레이아웃 시프트 방지 */
+  min-height: 24rem;
+  min-width: 100%;
+
+  /* 초기 로딩 시 화면에 표시되는 스켈레톤 배경 */
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 비율 유지 */
+    position: absolute;
+    top: 0;
+  }
 `;
 
 export const ContentContainer = styled.div`
@@ -94,24 +109,4 @@ export const shimmer = keyframes`
   100% {
     background-position: 468px 0;
   }
-`;
-
-export const SkeletonImage = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
-  background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
-  background-size: 800px 100%;
-  animation: ${shimmer} 1.5s infinite linear;
-  z-index: 1;
 `;

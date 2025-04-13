@@ -2,14 +2,6 @@ import { getPostBySlug, markdownToHtml, getAllPosts } from '@/lib/server/posts';
 import { notFound } from 'next/navigation';
 import PostClient from './page.client';
 
-// 정적 경로 생성
-export async function generateStaticParams() {
-  const posts = getAllPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
 export default async function PostPage({
   params,
 }: {
