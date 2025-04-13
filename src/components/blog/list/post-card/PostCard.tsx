@@ -16,7 +16,7 @@ import {
   CategoryLabel,
   CategoryLink,
 } from './PostCard.styles';
-import { SuspenseImage } from '@/components';
+import SuspenseImage from '@/components/common/skeleton/SuspenseImage';
 
 interface PostCardProps {
   post: Post;

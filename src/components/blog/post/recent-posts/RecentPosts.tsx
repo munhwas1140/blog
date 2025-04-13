@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { format } from 'date-fns';
 import { Post } from '@/types';
-import { SkeletonImage } from '../../styles/common-styles';
 import {
   RecentPostsSection,
   RecentPostsTitle,
@@ -15,6 +14,7 @@ import {
   RecentPostInfo,
   RecentPostTitle,
   RecentPostDate,
+  SkeletonImage,
 } from './RecentPosts.styles';
 
 interface RecentPostsProps {

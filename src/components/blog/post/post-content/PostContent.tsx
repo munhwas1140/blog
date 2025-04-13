@@ -2,8 +2,11 @@
 
 import { Suspense } from 'react';
 import { SuspenseImage } from '@/components';
-import { ImageContainer, ContentContainer } from './PostContent.styles';
-import { SkeletonImage } from '../../styles/common-styles';
+import {
+  ImageContainer,
+  ContentContainer,
+  SkeletonImage,
+} from './PostContent.styles';
 
 interface PostContentProps {
   htmlContent: string;

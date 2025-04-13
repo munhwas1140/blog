@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import styled from 'styled-components';
-import { SuspenseImage } from '@/components';
+import styled, { keyframes } from 'styled-components';
+import SuspenseImage from '@/components/common/skeleton/SuspenseImage';
 
 export const RecentPostsSection = styled.section`
   margin-top: 3rem;
@@ -79,4 +79,33 @@ export const RecentPostTitle = styled.h4`
 export const RecentPostDate = styled.p`
   font-size: 0.875rem;
   color: #6b7280;
+`;
+
+export const shimmer = keyframes`
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+`;
+
+export const SkeletonImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-size: 800px 100%;
+  animation: ${shimmer} 1.5s infinite linear;
+  z-index: 1;
 `;

@@ -24,7 +24,7 @@ export default function CategorySelector({
       <ButtonsContainer>
         <CategoryButton
           onClick={() => onCategoryChange('all')}
-          isActive={currentCategory === 'all'}
+          $isActive={currentCategory === 'all'}
           type="button"
         >
           All ({getCategoryPostCount('all')})
@@ -34,7 +34,7 @@ export default function CategorySelector({
           <CategoryButton
             key={category}
             onClick={() => onCategoryChange(category)}
-            isActive={currentCategory === category}
+            $isActive={currentCategory === category}
             type="button"
           >
             {category} ({getCategoryPostCount(category)})

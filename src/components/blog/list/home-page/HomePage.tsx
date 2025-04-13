@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Post } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import TitleIcon from '../../../public/title.svg';
+import TitleIcon from '../../../../../public/title.svg';
 import {
   Container,
   HeaderSection,
@@ -137,7 +137,7 @@ export default function HomePage({ initialPosts, categories }: HomePageProps) {
       )}
 
       {/* 무조건 스크롤 버튼 렌더링 하되 CSS로 보이거나 숨기게 함 */}
-      <ScrollTopButton onClick={scrollToTop} show={showScrollTop}>
+      <ScrollTopButton onClick={scrollToTop} $show={showScrollTop}>
         <ChevronUpIcon strokeWidth={2.5} />
       </ScrollTopButton>
     </Container>

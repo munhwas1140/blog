@@ -26,7 +26,7 @@ export const PaginationContainer = styled.div`
 `;
 
 export interface PaginationLinkProps {
-  isActive?: boolean;
+  $isActive?: boolean;
 }
 
 export const PaginationLink = styled(Link)<PaginationLinkProps>`
@@ -37,7 +37,7 @@ export const PaginationLink = styled(Link)<PaginationLinkProps>`
   justify-content: center;
   border: 1px solid #e5e7eb;
   border-radius: 9999px;
-  font-weight: ${(props) => (props.isActive ? '600' : '400')};
+  font-weight: ${(props) => (props.$isActive ? '600' : '400')};
   transition: all 0.2s ease;
 
   @media (max-width: 640px) {
@@ -52,7 +52,7 @@ export const PaginationLink = styled(Link)<PaginationLinkProps>`
   }
 
   ${(props) =>
-    props.isActive &&
+    props.$isActive &&
     css`
       background-color: #3b82f6;
       color: white;

@@ -22,7 +22,7 @@ export const ButtonsContainer = styled.div`
 `;
 
 export interface CategoryButtonProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 
 export const CategoryButton = styled.button<CategoryButtonProps>`
@@ -39,7 +39,7 @@ export const CategoryButton = styled.button<CategoryButtonProps>`
   }
 
   ${(props) =>
-    props.isActive
+    props.$isActive
       ? css`
           background-color: #3b82f6;
           color: white;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 // 스크롤 버튼 인터페이스 정의
 export interface ScrollTopButtonProps {
-  show: boolean;
+  $show: boolean;
 }
 
 export const Container = styled.div`
@@ -72,8 +72,8 @@ export const ScrollTopButton = styled.button<ScrollTopButtonProps>`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.3s;
   z-index: 999; /* 더 높은 z-index 값 */
-  opacity: ${(props) => (props.show ? '1' : '0')};
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.$show ? '1' : '0')};
+  visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
 
   &:hover {
     background-color: #e9ecef;

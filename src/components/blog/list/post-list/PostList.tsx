@@ -9,7 +9,7 @@ import {
   PaginationContainer,
   PaginationLink,
 } from './PostList.styles';
-import { PostCard } from '@/components';
+import PostCard from '../post-card';
 
 interface PostListProps {
   posts: Post[];
@@ -99,7 +99,7 @@ export default function PostList({ posts, currentCategory }: PostListProps) {
             <PaginationLink
               key={page}
               href={createPageLink(page)}
-              isActive={currentPage === page}
+              $isActive={currentPage === page}
             >
               {page}
             </PaginationLink>
